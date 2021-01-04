@@ -278,7 +278,7 @@
             this.loggedIn = state.loginState
           }
           if (mutation.type === 'setCart') {
-            this.cart = state.cart
+            this.cart = state.cart ? state.cart : []
           }
           if (mutation.type === 'setIsAdmin') {
             this.isStuff = state.isAdmin;

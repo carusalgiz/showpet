@@ -10,6 +10,14 @@
         <AccountMenu></AccountMenu>
         <div class="main-content">
           <h2>Заказы</h2>
+          <div class="d-flex justify-center" v-if="ordersLoading">
+            <v-progress-circular indeterminate color="pink"></v-progress-circular>
+          </div>
+          <div class="content__list-wrapper" v-else>
+            <v-list class="content__item-wrapper" dense v-for="(item,index) of order.results" :key="index">
+              <orders-page-item :order="item"></orders-page-item>
+            </v-list>
+          </div>
         </div>
       </div>
     </v-container>
@@ -20,19 +28,48 @@
   // import {environment} from "../assets/environment";
   import AccountMenu from "../../../components/accountMenu";
   import {mapGetters} from "vuex";
+  import {environment} from "../../../assets/environment";
+  import OrdersPageItem from "../../../components/ordersPageItem";
 
   export default {
-    components: {AccountMenu},
+    components: {OrdersPageItem, AccountMenu},
     auth: false,
     name: "Orders",
     data() {
       return {
         user: null,
         loggedIn: false,
+        order: {
+          results: [],
+          count: 0
+        },
+        ordersLoading: false
       }
     },
     methods: {
-      ...mapGetters(['getLoginState', 'getUser'])
+      ...mapGetters(['getLoginState', 'getUser']),
+      getOrders() {
+        this.ordersLoading = true;
+        this.$axios.get(`${environment.api}/order`, {headers: {
+            'Authorization': 'Bearer ' + sessionStorage.getItem('token')
+          }}).then( (result) => {
+            this.order = result.data;
+            this.ordersLoading = false;
+        }, (err) => {
+          this.checkError(err.response);
+          this.ordersLoading = false;
+        });
+      },
+      checkError(error) {
+        if (error.status === 401 || error.status === 403) {
+          sessionStorage.removeItem('token');
+          sessionStorage.removeItem('user');
+          this.$store.commit('setLoginState', false);
+          this.$store.commit('setIsAdmin', false);
+          this.$store.commit('setUser', null);
+          this.$router.push('/');
+        }
+      }
     },
     mounted() {
       this.user = this.getUser();
@@ -49,6 +86,7 @@
           }
         });
       }
+      this.getOrders();
     }
   }
 </script>
@@ -79,5 +117,14 @@
 
   .main-content {
     width: 80%;
+  }
+
+  .content__list-wrapper{
+    border-radius: 7px;
+    border: 1px solid lightgray;
+    padding: 5px 10px;
+    .content__item-wrapper {
+
+    }
   }
 </style>

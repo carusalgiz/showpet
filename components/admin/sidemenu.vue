@@ -16,17 +16,17 @@
             v-for="item in items"
             :key="item.title"
             link
+            class="d-flex menu-item"
+            :to="item.href"
+            color="primary"
           >
-            <NuxtLink :to="item.href" class="d-flex menu-item">
-              <v-list-item-icon>
-                <v-icon>{{ item.icon }}</v-icon>
-              </v-list-item-icon>
+            <v-list-item-icon>
+              <v-icon>{{ item.icon }}</v-icon>
+            </v-list-item-icon>
 
-              <v-list-item-content>
-                <v-list-item-title class="item-title">{{ item.title }}</v-list-item-title>
-              </v-list-item-content>
-            </NuxtLink>
-
+            <v-list-item-content>
+              <v-list-item-title class="item-title">{{ item.title }}</v-list-item-title>
+            </v-list-item-content>
           </v-list-item>
         </v-list>
 

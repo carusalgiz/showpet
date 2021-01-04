@@ -151,3 +151,26 @@ export const flavor = [
     value: "other"
   }
 ];
+
+export const STATE_CHOICES = [
+  {value: 'NEW', name: 'Новый'},
+  {value: 'EQUIPPING', name: 'Комплектация'},
+  {value: 'ASSEMBLED', name: 'Укомплектован'},
+  {value: 'TO_DELIVERY', name: 'Передан в доставку'},
+  {value: 'COMPLETED', name: 'Выполнен/Доставлен'},
+  {value: 'CANCELED', name: 'Отменен'}
+]
+
+export const PAY_CHOICES = [
+  {value: 'CASH', name: 'Оплата наличными'},
+  {value: 'NONCASH', name: 'Оплата картой'},
+  {value: 'ONLINE', name: 'Оплата онлайн'}
+]
+
+export const PAY_STATE = [
+  {value: 'NOT_PAYED', name: 'Не оплачено'},
+  {value: 'IN_PROCESS', name: 'В процессе'},
+  {value: 'PAYED', name: 'Оплачено'},
+  {value: 'ERROR', name: 'Ошибка оплаты'},
+  {value: 'CANCELED', name: 'Отмена оплаты'}
+]
