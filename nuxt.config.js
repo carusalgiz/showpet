@@ -28,7 +28,8 @@ export default {
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
   plugins: [
     '~plugins/vue-the-mask.js',
-    '~plugins/vue-moment.js'
+    '~plugins/vue-moment.js',
+    { src: '~/plugins/TiptapVuetify', mode: 'client' }
   ],
   // Auto import components (https://go.nuxtjs.dev/config-components)
   components: true,
@@ -111,7 +112,7 @@ export default {
         ignoreOrder: true
       }
     }),
-    transpile: ['vue-lazy-hydration', 'intersection-observer','vuex-persist'],
+    transpile: ['vue-lazy-hydration','vuetify/lib', "tiptap-vuetify", 'intersection-observer','vuex-persist'],
     postcss: {
       plugins: {
       },
