@@ -30,7 +30,14 @@
           height="30"
         ></v-select>
         <div v-if="item.categories.length === 1">{{addToCartData.option.option}}</div>
-        <div class="item-price">{{addToCartData.option.price}} Р</div>
+        <div class="d-flex flex-column align-end">
+                <span v-bind:class="{'discount': addToCartData.option.discount > 0 || item.discount > 0}">
+                  <b>{{addToCartData.option.price}} P</b>
+                </span>
+          <template v-if="addToCartData.option.discount > 0 || addToCartData.option.discount > 0">
+            <span class="green--text ml-4">{{itemPrice}} P</span>
+          </template>
+        </div>
       </div>
     </v-card-text>
     <div class="pl-4 pr-4 pb-4 d-flex justify-center">
@@ -69,17 +76,35 @@
     methods: {
       addToCart() {
         let cart = localStorage.getItem('cart') != null ? JSON.parse(localStorage.getItem('cart')) : [];
+        const option = this.addToCartData.option
         cart.push({
           id: this.item.id,
           data: {
             ...this.item
           },
-          option: this.addToCartData.option,
+          option: option,
           count: this.addToCartData.count,
-          path: this.$route.path + '/' + this.item.slug
+          path: `${this.$route.path}/${this.item.slug}?id=${option.id}`
         })
         localStorage.setItem('cart', JSON.stringify(cart));
         this.$store.commit('setCart', cart);
+      }
+    },
+    computed:{
+      itemPrice() {
+        if (this.item.discount < this.addToCartData.option.discount) {
+          if (this.addToCartData.option.discount > 0) {
+            return (this.addToCartData.option.price - ((this.addToCartData.option.price / 100) * this.addToCartData.option.discount)).toFixed(2)
+          } else {
+            return this.addToCartData.option.price
+          }
+        } else {
+          if (this.item.discount > 0) {
+            return (this.addToCartData.option.price - ((this.addToCartData.option.price / 100) * this.item.discount)).toFixed(2)
+          } else {
+            return this.addToCartData.option.price
+          }
+        }
       }
     }
   }
@@ -90,6 +115,9 @@
   .item-price{
     font-family: "Montserrat Bold", sans-serif;
     font-size: 1.2rem;
+  }
+  .discount{
+    text-decoration: line-through;
   }
   .item-link{
     text-decoration: none;

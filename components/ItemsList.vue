@@ -62,11 +62,12 @@
               rounded
               color="primary"
               class="mb-4"
-              @click="loadList"
+              @click="showList('show')"
               large>
               Показать
             </v-btn>
             <v-btn
+              @click="showList('reset')"
               rounded
               large>
               Сбросить
@@ -373,6 +374,7 @@
         console.log(this.filters);
       },
       showList(mode) {
+        console.log(mode);
         if (mode === 'show') {
           this.loadList();
         } else {
